@@ -1,0 +1,128 @@
+selfcheck ok
+Training: 5400 waveforms, 9 classes, SNR 20-50 dB, nominal 60 Hz
+Stress test: SNR 30 dB + random phase, +/-0.1 Hz drift, 0.5-2% background harmonics
+(frequency drift and phase are never seen in training)
+
+Configuration                            50 dB 40 dB 30 dB 20 dB   stress test
+1. Plain FFT (assumes 60.000 Hz)         99.8% 99.9% 100.0% 98.6%    87.6%
+2. Synchronous resampling only           99.6% 99.7% 99.8% 98.3%    93.0%
+3. Background harmonics training only    99.9% 99.9% 99.9% 98.5%    94.0%
+4. Both                                  99.7% 99.8% 99.9% 98.3%    99.6%
+
+Stress test, 1. Plain FFT (assumes 60.000 Hz): accuracy 87.6%
+                       precision    recall  f1-score   support
+
+               Normal      1.000     0.355     0.524       200
+                  Sag      1.000     1.000     1.000       200
+                Swell      1.000     1.000     1.000       200
+         Interruption      1.000     1.000     1.000       200
+            Harmonics      1.000     0.530     0.693       200
+              Flicker      1.000     1.000     1.000       200
+Oscillatory transient      0.656     1.000     0.792       200
+                Notch      0.629     1.000     0.772       200
+      Sag + harmonics      1.000     1.000     1.000       200
+
+             accuracy                          0.876      1800
+            macro avg      0.921     0.876     0.865      1800
+         weighted avg      0.921     0.876     0.865      1800
+
+Confusion matrix (rows = true, cols = predicted):
+         Norm   Sag Swell  Intr  Harm Flick Trans Notch Sag+H
+   Norm    71     0     0     0     0     0    11   118     0
+    Sag     0   200     0     0     0     0     0     0     0
+  Swell     0     0   200     0     0     0     0     0     0
+   Intr     0     0     0   200     0     0     0     0     0
+   Harm     0     0     0     0   106     0    94     0     0
+  Flick     0     0     0     0     0   200     0     0     0
+  Trans     0     0     0     0     0     0   200     0     0
+  Notch     0     0     0     0     0     0     0   200     0
+  Sag+H     0     0     0     0     0     0     0     0   200
+
+Stress test, 2. Synchronous resampling only: accuracy 93.0%
+                       precision    recall  f1-score   support
+
+               Normal      1.000     0.380     0.551       200
+                  Sag      0.995     1.000     0.998       200
+                Swell      1.000     1.000     1.000       200
+         Interruption      1.000     0.995     0.997       200
+            Harmonics      1.000     1.000     1.000       200
+              Flicker      1.000     1.000     1.000       200
+Oscillatory transient      0.921     0.995     0.957       200
+                Notch      0.649     1.000     0.787       200
+      Sag + harmonics      1.000     1.000     1.000       200
+
+             accuracy                          0.930      1800
+            macro avg      0.952     0.930     0.921      1800
+         weighted avg      0.952     0.930     0.921      1800
+
+Confusion matrix (rows = true, cols = predicted):
+         Norm   Sag Swell  Intr  Harm Flick Trans Notch Sag+H
+   Norm    76     0     0     0     0     0    17   107     0
+    Sag     0   200     0     0     0     0     0     0     0
+  Swell     0     0   200     0     0     0     0     0     0
+   Intr     0     1     0   199     0     0     0     0     0
+   Harm     0     0     0     0   200     0     0     0     0
+  Flick     0     0     0     0     0   200     0     0     0
+  Trans     0     0     0     0     0     0   199     1     0
+  Notch     0     0     0     0     0     0     0   200     0
+  Sag+H     0     0     0     0     0     0     0     0   200
+
+Stress test, 3. Background harmonics training only: accuracy 94.0%
+                       precision    recall  f1-score   support
+
+               Normal      1.000     1.000     1.000       200
+                  Sag      1.000     1.000     1.000       200
+                Swell      1.000     1.000     1.000       200
+         Interruption      1.000     1.000     1.000       200
+            Harmonics      1.000     0.460     0.630       200
+              Flicker      1.000     1.000     1.000       200
+Oscillatory transient      0.649     1.000     0.787       200
+                Notch      1.000     1.000     1.000       200
+      Sag + harmonics      1.000     1.000     1.000       200
+
+             accuracy                          0.940      1800
+            macro avg      0.961     0.940     0.935      1800
+         weighted avg      0.961     0.940     0.935      1800
+
+Confusion matrix (rows = true, cols = predicted):
+         Norm   Sag Swell  Intr  Harm Flick Trans Notch Sag+H
+   Norm   200     0     0     0     0     0     0     0     0
+    Sag     0   200     0     0     0     0     0     0     0
+  Swell     0     0   200     0     0     0     0     0     0
+   Intr     0     0     0   200     0     0     0     0     0
+   Harm     0     0     0     0    92     0   108     0     0
+  Flick     0     0     0     0     0   200     0     0     0
+  Trans     0     0     0     0     0     0   200     0     0
+  Notch     0     0     0     0     0     0     0   200     0
+  Sag+H     0     0     0     0     0     0     0     0   200
+
+Stress test, 4. Both: accuracy 99.6%
+                       precision    recall  f1-score   support
+
+               Normal      0.990     0.980     0.985       200
+                  Sag      0.995     1.000     0.998       200
+                Swell      1.000     1.000     1.000       200
+         Interruption      1.000     0.995     0.997       200
+            Harmonics      1.000     1.000     1.000       200
+              Flicker      1.000     1.000     1.000       200
+Oscillatory transient      0.975     0.990     0.983       200
+                Notch      1.000     0.995     0.997       200
+      Sag + harmonics      1.000     1.000     1.000       200
+
+             accuracy                          0.996      1800
+            macro avg      0.996     0.996     0.996      1800
+         weighted avg      0.996     0.996     0.996      1800
+
+Confusion matrix (rows = true, cols = predicted):
+         Norm   Sag Swell  Intr  Harm Flick Trans Notch Sag+H
+   Norm   196     0     0     0     0     0     4     0     0
+    Sag     0   200     0     0     0     0     0     0     0
+  Swell     0     0   200     0     0     0     0     0     0
+   Intr     0     1     0   199     0     0     0     0     0
+   Harm     0     0     0     0   200     0     0     0     0
+  Flick     0     0     0     0     0   200     0     0     0
+  Trans     2     0     0     0     0     0   198     0     0
+  Notch     0     0     0     0     0     0     1   199     0
+  Sag+H     0     0     0     0     0     0     0     0   200
+
+Top features: rms_min (0.17), rms_max (0.12), h7 (0.08), band_250_1000Hz (0.08), band_above_1kHz (0.08)
